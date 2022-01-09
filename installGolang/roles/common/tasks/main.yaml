@@ -1,0 +1,44 @@
+---
+# file: roles/common/tasks/main.yml
+- name: Get Os information
+  debug: 
+    var: ansible_distribution
+
+- name: "Go-Lang | Install dependencies"
+  yum:
+    name: ['curl', 'gcc', 'git', 'findutils', 'make', 'rsync', 'tar']
+    state: present
+  register: centos_result
+  until: centos_result is success
+  retries: 1
+  delay: 2
+
+- name: "Go-Lang | Define GOARCH"
+  set_fact:
+    GOARCH: "amd64"
+  when: GOARCH is not defined
+
+- name: "Go-Lang | Define GOOS"
+  set_fact:
+    GOOS: "linux"
+  when: GOOS is not defined
+
+- name: Checking if old go exist
+  stat:
+    path: "/usr/local/go"
+  register: local_go
+
+- name: Report if old go package exist
+  debug:
+    msg: "Go already exist"
+  when: local_go.stat.exists
+
+- name: Check old go version
+  shell: "go version > tee -a /tmp/go_version"
+  when: local_go.stat.exists
+
+- name: Move old go version if exist
+  shell: "mv /usr/local/go /usr/local/go_$(cat /tmp/go_version)"
+  when: local_go.stat.exists
+
+

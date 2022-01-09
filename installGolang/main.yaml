@@ -1,0 +1,10 @@
+---
+- hosts: golang-servers
+  remote_user: root
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+    - install
+  vars:
+    extra_path: /usr/local/go/bin

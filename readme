@@ -1,0 +1,5 @@
+scp -r /drives/d/00erbay/projects/ansible root@10.243.231.38:/opt/ansible
+
+# install golang to the servers
+update hosts.yaml file before 
+ansible-playbook installGolang/main.yaml -i hosts.ini

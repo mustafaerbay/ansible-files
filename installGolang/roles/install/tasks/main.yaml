@@ -1,0 +1,23 @@
+---
+- name: copy golang tar package to the hosts
+  copy:
+    src: go1.17.6.linux-amd64.tar.gz
+    dest: /tmp/go1.17.6.linux-amd64.tar.gz
+
+- name: untar golang package
+  shell: "cd /tmp/ && tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz"
+  when: ansible_distribution == "CentOS"
+
+- name: get PATH variable
+  shell: "echo $PATH"
+  register: new_path
+
+- set_fact: 
+    new_path={{ new_path.stdout }}  
+
+- name: 'Add {{ extra_path }} if PATH does not exist'
+  lineinfile:
+    path: /etc/environment
+    line: 'PATH="{{ new_path }}:{{ extra_path }}"'
+    insertafter: EOF
+  when: lookup('file', '/etc/environment') is not search('^\s*PATH\s*=')
