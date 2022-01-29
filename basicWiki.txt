@@ -1,0 +1,204 @@
+### https://htrdc.udemy.com/course/learn-ansible/learn/lecture/7133380#notes
+
+#10. Ansible Inventory
+    ansible golang-servers -m ping -i hosts.ini
+
+    To test ping command without check host_key
+        ansible config file
+            /etc/ansible/ansible.cfg
+                host_key_checking=false ( to check ping)
+
+#11. Introduction to YAML
+
+    KEY-VALUE PAIR
+        Fruit: Apple
+        Vegetable: Carrot
+        Liquid: Water
+        Meat: Chicken
+
+    ARRAY/LISTS
+        Fruits:
+        -   Orange
+        -   Apple
+        -   Banana
+
+        Vegetables:
+        -   Carrot
+        -   Cauliflower
+        -   Tomato
+
+    Dictionary/map
+
+        Banana:
+            Calories: 100
+            Fat: 100
+            Carbs: 100
+        Grapes:
+            Calories: 100
+            Fat: 100
+            Carbs: 100      
+
+#13. Ansible Playbook
+    
+    Playbook - A single yaml file
+        Play - Defines a set of activities(tasks) to be run on hosts
+            Task - An action to be performed on the host
+                execute a command
+                run a script
+                install package 
+                shutdown/restart
+            
+    -
+        name:
+        hosts:
+        tasks:
+        -   name:
+            command: // ansible modules (ansible-doc -l)
+        -   name:
+            script: // ansible modules
+        -   name:
+            yum: // ansible modules
+
+#14. run ansible playbooks
+    
+    Imperative way
+    -   ansible <hosts> -a <command> 
+        ansible all - a "/sbin/reboot"
+
+    -   ansible <hosts> -m <module>
+        ansible target1 -m ping
+
+    Declerative way
+    -   ansible-playbook playbook-webserver.yaml
+
+#15. Atom IDE with Ansible
+    apm install linter-js-yaml
+    apm install remote-sync
+        restart ide
+            right click/ remote sync/ configure
+
+17. Ansible Modules
+    
+        System
+            User
+            Group
+            Hostname
+            Iptables
+            Lvg
+            Lvol
+            Make
+            Mount
+            Ping
+            Timezone
+            Systemd
+            Service
+        Commands
+            Command
+            Expect
+            Raw
+            Script
+            Shell
+        Files
+            Acl
+            Archive
+            Copy
+            File
+            Find
+            Lineinfile
+            Replace
+            Stat
+            Template
+            Unarchive
+        Database
+            Mondodb
+            Mssql
+            Mysql
+            PostgreSQL
+            Proxysql
+            vertica
+        Cloud
+            Amazon
+            Azure
+            Docker
+            Openstack
+            Google
+            ...
+        Windows
+            Win_copy
+            Win_command
+            Win_shell
+            Win_iis_website
+    
+    ex:
+        -
+            name: Start service
+            hosts: localhost
+            tasks:
+             - name: start the database
+               service:
+                name: postgresql // property of service
+                state: started // property of service
+
+    idempotent modules
+        lineinfile
+        service
+            state
+
+18.Example
+
+    -
+    name: 'Execute a script on all web server nodes'
+    hosts: web_nodes
+    tasks:
+        -
+            name: 'Execute a script'
+            script: /tmp/install_script.sh
+        -
+            name: 'Start httpd service'
+            service: 'name=httpd state=started'
+    ----------------------------------------------------------------
+    -
+    name: 'Execute a script on all web server nodes and start httpd service'
+    hosts: web_nodes
+    tasks:
+        -
+            name: 'Update entry into /etc/resolv.conf'
+            lineinfile:
+                path: /etc/resolv.conf
+                line: 'nameserver 10.1.250.10'
+        -
+            name: 'Execute a script'
+            script: /tmp/install_script.sh
+        -
+            name: 'Start httpd service'
+            service:
+                name: httpd
+                state: present
+
+    ----------------------------------------------------------------
+    -
+    name: 'Execute a script on all web server nodes and start httpd service'
+    hosts: web_nodes
+    tasks:
+        -
+            name: 'Update entry into /etc/resolv.conf'
+            lineinfile:
+                path: /etc/resolv.conf
+                line: 'nameserver 10.1.250.10'
+        -
+            name: 'Create a new user'
+            user:
+                name: web_user
+                uid: 1040
+                group: developers
+        -
+            name: 'Execute a script'
+            script: /tmp/install_script.sh
+        -
+            name: 'Start httpd service'
+            service:
+                name: httpd
+                state: present
+
+
+    
