@@ -1,5 +1,5 @@
 ---
-- hosts: golang-servers
+- hosts: all
   remote_user: root
   become: yes
   become_method: sudo
