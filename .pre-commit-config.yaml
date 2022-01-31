@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0  # Use the ref you want to point at
+    hooks:
+    -   id: trailing-whitespace
+    # -   id: ...
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: v4.2.0
+    hooks:
+      - id: ansible-lint
+        name: Check for ansible-lint errors
+        files: \.(yaml|yml)$
+        exclude: ansible_collections/arista/cvp/docs
