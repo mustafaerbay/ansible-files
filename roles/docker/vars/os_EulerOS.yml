@@ -1,0 +1,7 @@
+name: Mustafa Erbay
+repo:
+  name: base
+  description: EulerOS-2.0SP5 base
+  baseurl: http://mirrors.tools.huawei.com/euler/2.5/os/x86_64/
+  gpgcheck: yes
+  gpgkey: http://mirrors.tools.huawei.com/euler/2.5/os/RPM-GPG-KEY-EulerOS

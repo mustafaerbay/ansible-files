@@ -1,5 +1,5 @@
 ---
-- hosts: EulerOS_x86
+- hosts: all
   remote_user: root
   become: yes
   become_method: sudo

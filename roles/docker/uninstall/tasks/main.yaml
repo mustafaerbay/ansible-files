@@ -1,9 +1,13 @@
 ---
 # file: roles/common/tasks/main.yml
+- name: set variables
+  include_vars: "os_{{ ansible_facts['distribution'] }}.yml"
+
 - name: Debug variables
   debug:
     msg: |
       The distro is {{ ansible_distribution }}
+      The name is {{ name }}
 
 - name: "Docker | uninstall old package"
   yum:

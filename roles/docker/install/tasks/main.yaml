@@ -1,9 +1,7 @@
 ---
 # file: roles/common/tasks/main.yml
-- name: Get Os information
-  debug:
-    var:
-      - ansible_distribution
+- name: set variables
+  include_vars: "os_{{ ansible_facts['distribution'] }}.yml"
 
 - name: "Docker | Install for Euler or Centos"
   block:
@@ -15,23 +13,13 @@
       until: euler_yum_result is success
       retries: 1
       delay: 2
-    - name: download repo file
+    - name: yum repo config
       yum_repository:
-        name: base
-        description: EulerOS-2.0SP5 base
-        baseurl: http://mirrors.tools.huawei.com/euler/2.5/os/x86_64/
-        gpgcheck: yes
-        gpgkey: http://mirrors.tools.huawei.com/euler/2.5/os/RPM-GPG-KEY-EulerOS
-    # - name: download repo file
-    #   get_url:
-    #     url: https://mirrors.tools.huawei.com/docker-ce/linux/centos/docker-ce.repo
-    #     dest: /etc/yum.repos.d/docker-ce.repo
-    #     validate_certs: no
-    # - name: update repo file
-    #   replace:
-    #     path: /etc/yum.repos.d/docker-ce.repo
-    #     regexp: https://download.docker.com
-    #     replace: https://mirrors.tools.huawei.com/docker-ce
+        name: "{{repo.name}}"
+        description: "{{repo.description}}"
+        baseurl: "{{repo.baseurl}}"
+        gpgcheck: "{{repo.gpgcheck}}"
+        gpgkey: "{{repo.gpgkey}}"
 
     - name: update yum cache
       yum:
