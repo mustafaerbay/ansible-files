@@ -1,0 +1,26 @@
+---
+# file: roles/common/tasks/main.yml
+- name: Debug variables
+  debug:
+    msg: |
+      The distro is {{ ansible_distribution }}
+
+- name: "Docker | uninstall old package"
+  yum:
+    name: ['docker', 'docker-client', 'docker-client-latest', 'docker-common', 'docker-latest', 'docker-latest-logrotate', 'docker-logrotate','docker-engine']
+    state: absent
+  register: centos_result
+  until: centos_result is success
+  retries: 1
+  delay: 2
+  when: ansible_distribution in ['CentOS','EulerOS']
+
+- name: remove /var/lib/docker
+  file:
+    path: '/var/lib/docker'
+    state: absent
+
+- name: remove /var/lib/containerd
+  file:
+    path: '/var/lib/dockerd'
+    state: absent

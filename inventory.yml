@@ -1,0 +1,26 @@
+all:
+  vars:
+    ansible_connection=ssh
+    ansible_user=root
+    ansible_ssh_pass=Huawei@123
+  children:
+    EulerOS_x86:
+      children:
+        octopusAgent:
+          hosts:
+            10.244.116.157
+
+EulerOS_x86:
+  hosts:
+    10.244.116.157
+  vars:
+    repo_name: EulerOS-2.0SP5 base
+    repo_baseurl: http://mirrors.tools.huawei.com/euler/2.5/os/x86_64/
+    repo_enabled: 1
+    repo_gpgcheck: 1
+    repo_gpgk: http://mirrors.tools.huawei.com/euler/2.5/os/RPM-GPG-KEY-EulerOS
+
+
+octopusAgent:
+  hosts:
+    10.244.116.157

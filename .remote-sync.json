@@ -1,0 +1,21 @@
+{
+  "logger": {
+    "title": "Remote Sync"
+  },
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "10.243.231.38",
+  "port": "22",
+  "target": "/opt/ansible/",
+  "ignore": [
+    "basicWiki.txt",
+    "readme.md",
+    ".git/**",
+    ".remote-sync.json"
+  ],
+  "username": "root",
+  "password": "Huawei@123",
+  "watch": [],
+  "transport": "scp"
+}
